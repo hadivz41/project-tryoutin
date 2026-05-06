@@ -2,8 +2,8 @@ function start() {
 const nama = document.getElementById("nama").value;
 
 if (nama === "") {
-alert("Isi nama dulu 😑");
-return;
+    alert("Isi nama dulu 😑");
+    return;
 }
 
 localStorage.setItem("nama", nama);
@@ -16,33 +16,28 @@ window.location.href = "quiz.html";
 }
 
 const nama = localStorage.getItem("nama");
-
-if (nama) {
 const nav = document.getElementById("navbar");
+
+if (nama && nav) {
 const user = document.createElement("span");
 user.textContent = "Halo, " + nama;
 nav.appendChild(user);
 }
 
-function selesaiQuiz() {
-let benar = 8;
-let salah = 2;
-
-localStorage.setItem("benar", benar);
-localStorage.setItem("salah", salah);
-
-window.location.href = "result.html";
-}
-
+// QUIZ
 let indexSoal = 0;
 let benar = 0;
 
 const mapel = localStorage.getItem("mapel");
-const soal = soalData[mapel];
+const soal = typeof soalData !== "undefined" ? soalData[mapel] : null;
 
 function tampilSoal() {
+if (!soal) return;
+
 const s = soal[indexSoal];
 const container = document.getElementById("soal");
+
+if (!container) return;
 
 let html = `<h3>${s.soal}</h3>`;
 
@@ -67,7 +62,7 @@ if (indexSoal < soal.length) {
 }
 }
 
-function selesaiQuiz() {
+function selesaiQuiz()  {
 let salah = soal.length - benar;
 
 localStorage.setItem("benar", benar);
@@ -76,4 +71,12 @@ localStorage.setItem("salah", salah);
 window.location.href = "result.html";
 }
 
+if (typeof soal !== "undefined" && soal) {
 tampilSoal();
+}
+
+function ulangQuiz() {
+localStorage.removeItem("benar");
+localStorage.removeItem("salah");
+window.location.href = "select.html";
+}
